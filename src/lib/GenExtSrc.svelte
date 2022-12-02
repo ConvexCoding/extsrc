@@ -14,7 +14,7 @@
 
 	let [lpts, xmax, ymax] = getFileData(horizontalScale, verticalScale);
 
-
+  //let [lpts, xmax, ymax] = extsrcoutline(15, 10, 1);
   const image = new THREE.LatheGeometry(lpts, 51, 0, Math.PI * 2);    
   const lathcolors = generateLatheColors(image, verticalScale, 'rainbow', 32 )
   image.setAttribute( 'color', new THREE.BufferAttribute( lathcolors, 3 ) );

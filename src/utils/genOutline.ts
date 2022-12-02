@@ -2,9 +2,9 @@ import {Vector2 } from 'three';
 import { fittofermiDirac } from './fermi';
 import type { FermiData } from './fermi';
 
-export async function getFileData(horizontalScale = 15, verticalScale = 10): Promise<[Vector2[], number, number]> {
-  const response = await require('./test3.txt');
-  const filestr = await response.text();
+export async function getFileData(horizontalScale = 15, verticalScale = 10) {
+  const response = await fetch('./test3.txt');
+  const filestr = await response.text()
 
   const xsraw: number[] = [];
   const ysraw: number[] = [];
@@ -20,7 +20,7 @@ export async function getFileData(horizontalScale = 15, verticalScale = 10): Pro
       }
     }
   });
-
+  //console.log(xsraw, ysraw);
   const xmax = Math.max(...xsraw);
   const ymax = Math.max(...ysraw);
 
@@ -31,6 +31,7 @@ export async function getFileData(horizontalScale = 15, verticalScale = 10): Pro
   for(let i = 0; i < xs.length; i++) {
     data.push(new Vector2(xs[i], ys[i]));
   }
+  //console.log(data)
   //const output: FermiData = {data, xmax, ymax};
   return [data, xmax, ymax];
 }
