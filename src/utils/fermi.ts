@@ -38,7 +38,9 @@ export function fittofermiDirac(xs: number[], ys: number[], betaest = 20, radius
 
 	const yfermi: number[] = [ys.length];
 	for (let i = 0; i < ys.length; i++) { 
-    yfermi[i] = fermiDirac(xs[i], b, r, p); }
+    const y = fermiDirac(xs[i], b, r, p);
+    yfermi[i] = (y > 1.0) ? 1.0 : y; // compenstate for numerical error
+  }
 	
 	return yfermi;
 }

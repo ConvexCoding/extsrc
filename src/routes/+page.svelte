@@ -29,7 +29,7 @@
 <div class="scene">
 	{#key `${controlsResetKey}`}
 		<Canvas>
-			<T.PerspectiveCamera makeDefault position={[-40, 20, 40]} fov={50}>
+			<T.PerspectiveCamera makeDefault position={[-50, 25, 50]} fov={50}>
 				<OrbitControls rotateSpeed={4} enableDamping={false} />
 			</T.PerspectiveCamera>
 			<T.AmbientLight color="white" intensity={0.6} />
