@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { T } from '@threlte/core';
+	import { T, Three } from '@threlte/core';
   import { Text } from '@threlte/extras'
-	import { extsrcoutline, getFileData } from '../utils/genOutline';
+	import { getFileData } from '../utils/genOutline';
 	import { DoubleSide, Vector2} from 'three';
   import { Lut } from 'three/examples/jsm/math/Lut'
   import * as THREE from 'three';
@@ -12,13 +12,28 @@
   export let horizontalScale = 20;
   export let verticalScale = 30;
 
-	let [lpts, xmax, ymax] = getFileData(horizontalScale, verticalScale);
+  const fnames = ['./test0.txt', './test1.txt', './test2.txt'];
+
+	//let [lpts, xmax, ymax] = getFileData(horizontalScale, verticalScale);
+
+  let promise = getFileData(fnames[2], horizontalScale, verticalScale);
+
 
   //let [lpts, xmax, ymax] = extsrcoutline(15, 10, 1);
-  const image = new THREE.LatheGeometry(lpts, 51, 0, Math.PI * 2);    
-  const lathcolors = generateLatheColors(image, verticalScale, 'rainbow', 32 )
-  image.setAttribute( 'color', new THREE.BufferAttribute( lathcolors, 3 ) );
+  let xmax = -1e20;
+  let ymax = -1e20;
 
+  let image: THREE.LatheGeometry;
+  promise.then((fd) => {
+    if (fd) {
+      xmax = fd.xmax;
+      ymax = fd.ymax;
+      //console.log(fd);
+      image = new THREE.LatheGeometry(fd.data, 51, 0, Math.PI * 2);    
+      const lathcolors = generateLatheColors(image, verticalScale, 'rainbow', 32 )
+      image.setAttribute( 'color', new THREE.BufferAttribute( lathcolors, 3 ) );
+    }
+  });
 
   const fontSize = 2;
   const fontColor = 'black';
@@ -47,15 +62,27 @@
   />
 </T.Mesh>
 
-<T.Mesh position={[-horizontalScale-3, verticalScale - 3, -horizontalScale]} castShadow let:ref>
+<T.Mesh position={[-horizontalScale-3, verticalScale-3, -horizontalScale]} castShadow let:ref>
   <Text 
-      text={ymax < 1 ? ymax.toFixed(2) : '1.0'}
+      text={'1.0'}
       color={fontColor}
       fontSize={fontSize} 
       anchorX={'center'} 
       anchorY={'top'}
   />
 </T.Mesh>
+
+{#if (ymax < 0.85)}
+  <T.Mesh position={[-horizontalScale-3, ymax*verticalScale-3.5, -horizontalScale]} castShadow let:ref>
+    <Text 
+      text={'peak=' + ymax.toFixed(2)}
+      color={fontColor}
+      fontSize={fontSize} 
+      anchorX={'right'}  
+    />
+  </T.Mesh>
+{/if}
+
 
 <T.Mesh position={[-horizontalScale-3, -3, -horizontalScale]} castShadow let:ref>
   <Text 
