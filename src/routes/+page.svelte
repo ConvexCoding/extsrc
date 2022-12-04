@@ -1,24 +1,23 @@
 <script lang="ts">
 	import { Canvas, OrbitControls, T, type ThreltePointerEvent } from '@threlte/core';
 	import { Vector3 } from 'three';
-	import BuildCoords from '../lib/BuildCoords.svelte';
-	import BuildBackgroundGrids from '../lib/BuildBackgroundGrids.svelte';
-  import GenExtSrc from '../lib/GenExtSrc.svelte';
+	import BuildCoords from '$lib/BuildCoords.svelte';
+	import BuildBackgroundGrids from '$lib/BuildBackgroundGrids.svelte';
+	import GenExtSrc from '$lib/GenExtSrc.svelte';
 
 	let showAxes = false;
 	let showGrid = true;
-  let showWfe = true;
+	let showWfe = true;
 
 	let controlsResetKey = 0; // use this to rerender the orbit controls
 
-	function resetLensPosition() { 
+	function resetLensPosition() {
 		controlsResetKey++;
 	}
 
-  let verticalOffset = -5;
-  let verticalScale = 20;
-  let horizontalScale = 15
-
+	let verticalOffset = -5;
+	let verticalScale = 20;
+	let horizontalScale = 15;
 </script>
 
 <div>
@@ -40,22 +39,18 @@
 				<BuildCoords locXYZ={new Vector3(0, verticalOffset, 0)} lineLength={15} />
 			{/if}
 
-      {#if showWfe}
-        <GenExtSrc 
-          verticalOffset={verticalOffset}
-          horizontalScale={horizontalScale}
-          verticalScale={verticalScale}/>
-      {/if} 
+			{#if showWfe}
+				<GenExtSrc {verticalOffset} {horizontalScale} {verticalScale} />
+			{/if}
 
 			{#if showGrid}
 				<BuildBackgroundGrids
 					horizontalSize={horizontalScale * 2}
 					verticalSize={verticalScale}
-					verticalOffset={verticalOffset}
+					{verticalOffset}
 					showSides={true}
 				/>
 			{/if}
-
 		</Canvas>
 		<slot {resetLensPosition} />
 	{/key}
@@ -74,7 +69,7 @@
 	<label for="show-grid">{'Show Grid'}</label>
 	<input id="show-grid" type="checkbox" class="toggle" bind:checked={showGrid} />
 	<br />
-  <label for="show-wfe">{'Show WFE'}</label>
+	<label for="show-wfe">{'Show WFE'}</label>
 	<input id="show-wfe" type="checkbox" class="toggle" bind:checked={showWfe} />
 	<br />
 </div>
