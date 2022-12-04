@@ -11,12 +11,13 @@
   export let verticalOffset = 0;
   export let horizontalScale = 20;
   export let verticalScale = 30;
+  export let filename = './test0.txt';
 
   const fnames = ['./test0.txt', './test1.txt', './test2.txt', './test3.txt'];
 
 	//let [lpts, xmax, ymax] = getFileData(horizontalScale, verticalScale);
 
-  let promise = getFileData(fnames[3], horizontalScale, verticalScale);
+  let promise = getFileData(filename, horizontalScale, verticalScale);
 
 
   //let [lpts, xmax, ymax] = extsrcoutline(15, 10, 1);

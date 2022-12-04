@@ -2,8 +2,12 @@
 	import { Canvas, OrbitControls, T, type ThreltePointerEvent } from '@threlte/core';
 	import { Vector3 } from 'three';
 	import BuildCoords from '../lib/BuildCoords.svelte';
+  import { Text } from '@threlte/extras'
 	import BuildBackgroundGrids from '../lib/BuildBackgroundGrids.svelte';
   import GenExtSrc from '../lib/GenExtSrc.svelte';
+	import { stringify } from 'querystring';
+
+  const fnames = ['./test0.txt', './test1.txt', './test2.txt', './test3.txt'];
 
 	let showAxes = false;
 	let showGrid = true;
@@ -18,6 +22,7 @@
   let verticalOffset = -5;
   let verticalScale = 20;
   let horizontalScale = 15
+  $: filen = fnames[0];
 
 </script>
 
@@ -36,15 +41,22 @@
 			<T.DirectionalLight castShadow position={[0, 50, 0]} />
 			<T.DirectionalLight position={[0, -50, 0]} intensity={0.5} />
 
-			{#if showAxes}
-				<BuildCoords locXYZ={new Vector3(0, verticalOffset, 0)} lineLength={15} />
-			{/if}
+      <T.Mesh position={[0, verticalScale + 10, 0]}  rotation={[0, -Math.PI/4, 0]} castshadow let:ref>
+        <Text 
+            text={'Showing File: ' + filen}
+            color={'black'}  
+            fontSize={3} 
+            anchorX={'center'} 
+            anchorY={'top'}
+        />
+      </T.Mesh>
 
       {#if showWfe}
         <GenExtSrc 
           verticalOffset={verticalOffset}
           horizontalScale={horizontalScale}
-          verticalScale={verticalScale}/>
+          verticalScale={verticalScale}
+          filename={filen}/>
       {/if} 
 
 			{#if showGrid}
@@ -77,13 +89,23 @@
   <label for="show-wfe">{'Show WFE'}</label>
 	<input id="show-wfe" type="checkbox" class="toggle" bind:checked={showWfe} />
 	<br />
+  <br />
+  <select multiple bind:value={filen}>
+    {#each fnames as fname}
+      <option value={fname}>
+        {fname}
+      </option>
+    {/each}
+  </select>
+	<br />
+
 </div>
 
 <style>
 	.scene {
 		margin-left: 200px;
 		margin-top: 150px;
-		width: 80%;
+		width: 50%;
 		height: 80%;
 		position: absolute;
 		inset: 0;
