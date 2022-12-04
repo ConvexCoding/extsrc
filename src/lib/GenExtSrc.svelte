@@ -1,45 +1,48 @@
 <script lang="ts">
 	import { T, Three } from '@threlte/core';
 	import { Text } from '@threlte/extras';
-	import { getFileData } from '../utils/genOutline';
+	import { parseFermiFileData } from '../utils/genOutline';
 	import { DoubleSide, Vector2 } from 'three';
 	import { Lut } from 'three/examples/jsm/math/Lut';
 	import * as THREE from 'three';
 	import { generateLatheColors, findMinsAndMaxs } from '../utils/gUtils';
 	import type { FermiData } from '../utils/fermi';
 
+	// import testData from '../utils/fermi_data/test0.txt?raw';
+	// import testData from '../utils/fermi_data/test1.txt?raw';
+	// import testData from '../utils/fermi_data/test2.txt?raw';
+	import testData from '../utils/fermi_data/test3.txt?raw';
+
 	export let verticalOffset = 0;
 	export let horizontalScale = 20;
 	export let verticalScale = 30;
 
-	const fnames = ['./test0.txt', './test1.txt', './test2.txt', './test3.txt'];
-
-	//let [lpts, xmax, ymax] = getFileData(horizontalScale, verticalScale);
-
 	//let [lpts, xmax, ymax] = extsrcoutline(15, 10, 1);
-	let xmax = -1e20;
-	let ymax = -1e20;
 
-	let image: THREE.LatheGeometry;
+	const fermiData = parseFermiFileData(testData);
 
-	getFileData(fnames[3], horizontalScale, verticalScale).then((fd) => {
-		if (fd) {
-			xmax = fd.xmax;
-			ymax = fd.ymax;
-			//console.log(fd);
-			image = new THREE.LatheGeometry(fd.data, 51, 0, Math.PI * 2);
-			const lathcolors = generateLatheColors(image, verticalScale, 'rainbow', 32);
-			image.setAttribute('color', new THREE.BufferAttribute(lathcolors, 3));
-		}
-	});
+	const xmax = fermiData.xmax;
+	const ymax = fermiData.ymax;
+	const image = new THREE.LatheGeometry(fermiData.data, 51, 0, Math.PI * 2);
+
+	const lathcolors = generateLatheColors(image, verticalScale, 'rainbow', 32);
+	image.setAttribute('color', new THREE.BufferAttribute(lathcolors, 3));
 
 	const fontSize = 2;
 	const fontColor = 'black';
 </script>
 
-<T.Mesh geometry={image} position={[0, verticalOffset, 0]} rotation={[0, 0, 0]} castShadow let:ref>
-	<T.MeshPhongMaterial vertexColors={true} opacity={1} transparent side={DoubleSide} />
-</T.Mesh>
+{#if image}
+	<T.Mesh
+		geometry={image}
+		position={[0, verticalOffset, 0]}
+		rotation={[0, 0, 0]}
+		castShadow
+		let:ref
+	>
+		<T.MeshPhongMaterial vertexColors={true} opacity={1} transparent side={DoubleSide} />
+	</T.Mesh>
+{/if}
 
 <T.Mesh
 	rotation={[0, -Math.PI / 4, 0]}
