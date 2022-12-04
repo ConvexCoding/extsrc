@@ -8,10 +8,10 @@
 	import { generateLatheColors, findMinsAndMaxs } from '../utils/gUtils';
 	import type { FermiData } from '../utils/fermi';
 
-	// import testData from '../utils/fermi_data/test0.txt?raw';
+	 import testData from '../utils/fermi_data/test0.txt?raw';
 	// import testData from '../utils/fermi_data/test1.txt?raw';
-	// import testData from '../utils/fermi_data/test2.txt?raw';
-	import testData from '../utils/fermi_data/test3.txt?raw';
+	//import testData from '../utils/fermi_data/test2.txt?raw';
+	//import testData from '../utils/fermi_data/test3.txt?raw';
 
 	export let verticalOffset = 0;
 	export let horizontalScale = 20;
@@ -19,7 +19,7 @@
 
 	//let [lpts, xmax, ymax] = extsrcoutline(15, 10, 1);
 
-	const fermiData = parseFermiFileData(testData);
+	const fermiData = parseFermiFileData(testData, horizontalScale, verticalScale);
 
 	const xmax = fermiData.xmax;
 	const ymax = fermiData.ymax;

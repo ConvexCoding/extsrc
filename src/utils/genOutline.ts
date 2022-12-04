@@ -3,29 +3,24 @@ import { fittofermiDirac } from './fermi';
 import type { FermiData } from './fermi';
 
 export function parseFermiFileData(rawData: string, horizontalScale = 15, verticalScale = 10) {
-	const xsall: number[] = [];
-	const ysall: number[] = [];
 	const xsraw: number[] = [];
 	const ysraw: number[] = [];
 
 	// platform independent line endings
 	const lines = rawData.split('\n').map((l) => l.trim());
+  //console.log('verticalScale', verticalScale);
+  //console.log(lines)
 
 	lines.forEach((line: string, index: number) => {
 		if (index > 0 && line.length > 0) {
 			// you can do this nice destructuring syntax in JS :)
 			const [x, y] = line.split(',').map((x) => parseFloat(x));
-			xsall.push(x);
-			ysall.push(y);
+      if (x > -1e-6) {
+        xsraw.push(x);
+        ysraw.push(y);
+      }
 		}
 	});
-	const mid = (xsall.length - 1) / 2;
-	xsraw.push(xsall[mid]);
-	ysraw.push(ysall[mid]);
-	for (let i = mid + 1; i < xsall.length; i++) {
-		xsraw.push(xsall[i]);
-		ysraw.push((ysall[i] + ysall[2 * mid - i]) / 2);
-	}
 
 	const xmax = Math.max(...xsraw);
 	const ymax = Math.max(...ysraw);
@@ -44,10 +39,7 @@ export function parseFermiFileData(rawData: string, horizontalScale = 15, vertic
 }
 
 function scaleYArray(arr: number[], scale: number): number[] {
-	const min = Math.min(...arr);
-	const max = 1.0;
-	const range = max - min;
-	const scaled = arr.map((x) => ((x - min) / range) * scale);
+	const scaled = arr.map((x) => (x * scale));  // min should always be 0 and max should always be 1
 	return scaled;
 }
 
