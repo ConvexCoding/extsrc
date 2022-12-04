@@ -5,24 +5,25 @@
   import { Text } from '@threlte/extras'
 	import BuildBackgroundGrids from '../lib/BuildBackgroundGrids.svelte';
   import GenExtSrc from '../lib/GenExtSrc.svelte';
-	import { stringify } from 'querystring';
 
-  const fnames = ['./test0.txt', './test1.txt', './test2.txt', './test3.txt'];
+  const fnames = ['test0', 'test1', 'test2', 'test3'];
 
 	let showAxes = false;
 	let showGrid = true;
   let showWfe = true;
 
-	let controlsResetKey = 0; // use this to rerender the orbit controls
+  let filen = fnames[0];
+  $: filen && resetLensPosition();
+  let controlsResetKey = 0; // use this to rerender the orbit controls
 
-	function resetLensPosition() { 
-		controlsResetKey++;
+
+	function resetLensPosition() {   
+    controlsResetKey++;
 	}
 
   let verticalOffset = -5;
   let verticalScale = 20;
   let horizontalScale = 15
-  $: filen = fnames[0];
 
 </script>
 
@@ -43,7 +44,7 @@
 
       <T.Mesh position={[0, verticalScale + 10, 0]}  rotation={[0, -Math.PI/4, 0]} castshadow let:ref>
         <Text 
-            text={'Showing File: ' + filen}
+            text={'Showing File ' + filen}
             color={'black'}  
             fontSize={3} 
             anchorX={'center'} 
@@ -56,7 +57,7 @@
           verticalOffset={verticalOffset}
           horizontalScale={horizontalScale}
           verticalScale={verticalScale}
-          filename={filen}/>
+          filename={'./' + filen + '.txt'}/>
       {/if} 
 
 			{#if showGrid}
